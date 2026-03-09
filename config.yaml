@@ -1,0 +1,99 @@
+# SuperStore Analytics System Configuration
+
+project:
+  name: "SuperStore Sales & Business Performance Analytics System"
+  version: "1.0.0"
+
+paths:
+  raw_data_dir: "data/raw"
+  processed_data_dir: "data/processed"
+  output_dir: "data/output"
+  logs_dir: "logs"
+
+data:
+  raw_file: "superstore_sales.csv"
+  processed_file: "superstore_clean.parquet"
+  date_format: "%Y-%m-%d"
+  encoding: "utf-8"
+  expected_columns:
+    - "Row ID"
+    - "Order ID"
+    - "Order Date"
+    - "Ship Date"
+    - "Ship Mode"
+    - "Customer ID"
+    - "Customer Name"
+    - "Segment"
+    - "Country"
+    - "City"
+    - "State"
+    - "Postal Code"
+    - "Region"
+    - "Product ID"
+    - "Category"
+    - "Sub-Category"
+    - "Product Name"
+    - "Sales"
+    - "Quantity"
+    - "Discount"
+    - "Profit"
+
+etl:
+  duplicate_subset: ["Order ID", "Product ID", "Customer ID"]
+  numeric_columns: ["Sales", "Quantity", "Discount", "Profit"]
+  date_columns: ["Order Date", "Ship Date"]
+  categorical_columns: ["Region", "Category", "Sub-Category", "Segment", "Ship Mode"]
+  loss_threshold: 0.0   # Profit < 0 is loss-making
+
+analytics:
+  top_n_products: 10
+  top_n_customers: 10
+  regions:
+    - "Central"
+    - "East"
+    - "South"
+    - "West"
+
+airflow:
+  dag_id: "superstore_etl_pipeline"
+  schedule_interval: "@daily"
+  start_date: "2024-01-01"
+  retries: 3
+  retry_delay_minutes: 5
+
+visualization:
+  figure_size: [14, 8]
+  color_palette: "husl"
+  output_format: "png"
+  dpi: 150
+
+# ── Azure Integration ─────────────────────────────────────────────────────────
+# Credentials are read from .env (never hardcode here).
+# Set azure.enabled: true to activate uploads during pipeline runs.
+
+azure:
+  enabled: true
+
+  # Azure Blob Storage
+  blob:
+    container: "superstore-analytics"
+    upload_raw: true
+    upload_processed: true
+    upload_outputs: true
+
+  # ADLS Gen2 — Medallion Architecture
+  adls:
+    filesystem: "superstore"      # ADLS container / filesystem name
+    bronze_path: "bronze/"        # raw CSV
+    silver_path: "silver/"        # cleaned Parquet
+    gold_path:   "gold/"          # analytics CSVs
+    dashboard_path: "dashboard/"  # PNG charts
+
+  # Azure Databricks
+  databricks:
+    dbfs_root: "/dbfs/superstore"
+    mount_point: "/mnt/superstore"
+    delta_path: "delta/"
+    notebooks_workspace_path: "/Shared/superstore"
+    upload_to_dbfs: true
+    run_notebooks: false   # flip to true to auto-trigger notebooks after upload

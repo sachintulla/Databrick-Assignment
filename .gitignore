@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv/
+venv/
+env/
+
+# Root-level venv (created by python -m venv .)
+bin/
+lib/
+include/
+share/
+pyvenv.cfg
+
+# Airflow venv
+airflow/.venv/
+
+# Data files (large; version only schema/small samples)
+data/raw/*.csv
+data/processed/*.parquet
+data/output/*.png
+data/output/*.csv
+data/output/spark_*/
+
+# Logs
+logs/
+
+# Airflow
+airflow/logs/
+airflow/airflow.db
+airflow/airflow.cfg
+airflow/webserver_config.py
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# macOS
+.DS_Store

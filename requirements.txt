@@ -1,0 +1,38 @@
+# Core Data Processing
+pandas==2.1.4
+numpy==1.26.2
+pyarrow==14.0.2
+
+# Apache Airflow
+apache-airflow==2.8.0
+apache-airflow-providers-databricks==6.0.0
+
+# PySpark (local mode for testing; Databricks provides its own)
+pyspark==3.5.0
+
+# Visualization
+matplotlib==3.8.2
+seaborn==0.13.0
+plotly==5.18.0
+
+# Utilities
+pyyaml==6.0.1
+python-dotenv==1.0.0
+
+# Testing
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Logging & Monitoring
+loguru==0.7.2
+
+# Databricks SDK (for notebook / dashboard interaction)
+databricks-sdk==0.18.0
+
+# Azure Storage
+azure-storage-blob==12.19.0
+azure-storage-file-datalake==12.14.0
+azure-identity==1.16.0
+
+# Apache Airflow Azure providers
+apache-airflow-providers-microsoft-azure==8.3.0
